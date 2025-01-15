@@ -1,0 +1,15 @@
+package com.mysite.sbb;
+
+public class HelloLombok {
+	private String hello;
+	private int lombok;
+	
+	public static void main(String[] args) {
+		HelloLombok helloLombok = new HelloLombok();
+		helloLombok.setHello("헬로");
+		// TODO Auto-generated method stub
+		
+
+	}
+
+}
