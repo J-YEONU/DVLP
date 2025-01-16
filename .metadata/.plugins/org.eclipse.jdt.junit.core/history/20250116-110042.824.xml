@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="SbbApplicationTests" project="sbb" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testsuite name="com.mysite.sbb.SbbApplicationTests" time="0.582" displayname="SbbApplicationTests" uniqueid="[engine:junit-jupiter]/[class:com.mysite.sbb.SbbApplicationTests]">
+    <testcase name="testJpa" classname="com.mysite.sbb.SbbApplicationTests" time="0.582" displayname="testJpa()" uniqueid="[engine:junit-jupiter]/[class:com.mysite.sbb.SbbApplicationTests]/[method:testJpa()]"/>
+  </testsuite>
+</testrun>
