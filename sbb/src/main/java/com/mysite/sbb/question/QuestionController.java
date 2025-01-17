@@ -1,7 +1,6 @@
 package com.mysite.sbb.question;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mysite.sbb.answer.AnswerForm;
 
@@ -31,10 +31,17 @@ public class QuestionController {
 	@GetMapping("/list")
 //	@ResponseBody
 //	아래를 문자열 그대로 내보내는 어노테이션
-	public String list(Model model) {
-		List<Question> questionList = this.questionService.getList();
-		model.addAttribute("questionList", questionList);
+//	public String list(Model model) {
+//		List<Question> questionList = this.questionService.getList();
+//		model.addAttribute("questionList", questionList);
+//		return "question_list";
+	
+	// 페이징 구현
+	public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+		Page<Question> paging = this.questionService.getList(page);
+		model.addAttribute("paging", paging);
 		return "question_list";
+		
 //	public List<Question> list() {
 //		return this.questionRepository.findAll();
 	}
