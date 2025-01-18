@@ -1,0 +1,13 @@
+<table>
+	<thead>
+		<tr>
+			<th>제목</th>
+			<th>작성일시</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="question : ${questionList}"></tr>
+			
+			
+	</tbody>
+</table>
