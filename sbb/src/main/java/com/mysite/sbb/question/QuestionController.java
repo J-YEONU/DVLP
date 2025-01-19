@@ -1,5 +1,7 @@
 package com.mysite.sbb.question;
 
+import java.security.Principal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mysite.sbb.answer.AnswerForm;
+import com.mysite.sbb.user.SiteUser;
+import com.mysite.sbb.user.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,7 @@ public class QuestionController {
 	
 //	private final QuestionRepository questionRepository; 
 	private final QuestionService questionService; 
+	private final UserService userService;
 	
 	@GetMapping("/list")
 //	@ResponseBody
@@ -60,11 +65,12 @@ public class QuestionController {
 	}
 	
 	@PostMapping("/create")
-	public String questionCreate(@Valid QuestionForm questiomForm, BindingResult bindingResult) {
+	public String questionCreate(@Valid QuestionForm questiomForm, BindingResult bindingResult, Principal principal) {
 		if(bindingResult.hasErrors()) {
 			return "question_form";
 		}
-		this.questionService.create(questiomForm.getSubject(), questiomForm.getContent());
+		SiteUser siteUser = this.userService.getUser(principal.getName());
+		this.questionService.create(questiomForm.getSubject(), questiomForm.getContent(), siteUser);
 		return "redirect:/question/list"; //징문 저장 후 징문 목록으로 이동
 	}
 	
