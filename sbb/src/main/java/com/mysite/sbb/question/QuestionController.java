@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerForm;
+import com.mysite.sbb.answer.AnswerService;
 import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
 
@@ -35,6 +37,7 @@ public class QuestionController {
 //	private final QuestionRepository questionRepository; 
 	private final QuestionService questionService; 
 	private final UserService userService;
+	private final AnswerService answerService;
 	
 	@GetMapping("/list")
 //	@ResponseBody
@@ -56,10 +59,12 @@ public class QuestionController {
 	}
 	
 	@GetMapping(value = "/detail/{id}")
-	public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
+	public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm,
+			@RequestParam(value = "answerPage", defaultValue = "0") int answerPage) {
 		Question question = this.questionService.getQuestion(id);
+		Page<Answer> answerPaging = this.answerService.getList(question, answerPage);
 		model.addAttribute("question", question);
-		
+		model.addAttribute("answerPaging", answerPaging);
 		return "question_detail";
 	}
 	
