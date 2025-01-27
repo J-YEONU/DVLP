@@ -48,8 +48,10 @@
     <!-- 답변의 갯수 표시 -->
     <h5 class="border-bottom my-3 py-2" 
         th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
-    <!-- 답변 반복 시작 -->
-    <div class="card my-3" th:each="answer : ${question.answerList}">
+    
+		<!-- 답변 반복 시작 -->
+<!--    <div class="card my-3" th:each="answer : ${question.answerList}">-->
+	<div class="card my-3" th:each="answer : ${paging}">
         <a th:id="|answer_${answer.id}|"></a>
 		<div class="card-body">
             <div class="card-text" th:utext="${@commonUtil.markdown(answer.content)}"></div>
@@ -87,6 +89,39 @@
     <!-- 답변 반복 끝  -->
 	
 	
+	<!-- 페이징처리 시작 -->
+		<div th:if="${!paging.isEmpty()}">
+			<ul class="pagination justify-content-center">
+				<li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+	<!--			<a class="page-link" th:href="@{|?page=${paging.number-1}|}">-->
+					<a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+						<span>이전</span>
+					</a>
+				</li>
+				<li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+					th:if="${page >= paging.number-5 and page <= paging.number+5}"
+					th:classappend="${page == paging.number} ? 'active'" class="page-item">
+	<!--			<a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>-->
+					<a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+				</li>
+				<li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+	<!--			<a class="page-link" th:href="@{|?page=${paging.number+1}|}">-->
+					<a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+						<span>다음</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
     <!-- 답변 작성 -->
     <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}"| 
 	method="post" class="my-3">
@@ -100,6 +135,7 @@
 <!--		<textarea th:field="*{content}" rows="10" class="form-control"></textarea>-->
 		<textarea sec:authorize="isAnonymous()" disabled 
 		th:field="*{content}" class="form-control" rows="10"></textarea>
+<!--		비 로그인시 disabled 적용안됨 왜?-->
       	<textarea sec:authorize="isAuthenticated()" 
 		th:field="*{content}" class="form-control" rows="10"></textarea>
 		
@@ -107,6 +143,10 @@
         <input sec:authorize="isAnonymous()" disabled type="submit" value="답변등록" class="btn btn-primary my-2">
 		<input sec:authorize="isAuthenticated()" type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
+	
+	<form th:action="@{|/question/detail/${question.id}|}" method="get" id="PageForm">
+		<input type="hidden" id="page" name="page" th:value="${paging.number}">
+	</form>
 </div>
 
 <script layout:fragment="script" type='text/javascript'>
@@ -128,6 +168,15 @@
 	});
 	// 마크다운에디터
 	var simplemde = new SimpleMDE({element: document.getElementById("content")});
+
+	const page_elements = document.getElementsByClassName("page-link");
+	Array.from(page_elements).forEach(function (element) {
+		element.addEventListener('click', function () {
+			document.getElementById('page').value = this.dataset.page;
+			document.getElementById('PageForm').submit();
+		});
+	});	
+	
 
 	// 추천기능을 ajax로 구현하는 중인데 게속 실패하는중..
 	// 로그인 되어있을때만 추천버튼이 작동해야하고

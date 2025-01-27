@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerForm;
+import com.mysite.sbb.answer.AnswerService;
 import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
 
@@ -35,7 +37,7 @@ public class QuestionController {
 //	private final QuestionRepository questionRepository; 
 	private final QuestionService questionService; 
 	private final UserService userService;
-	
+	private final AnswerService answerService;
 	@GetMapping("/list")
 //	@ResponseBody
 //	아래를 문자열 그대로 내보내는 어노테이션
@@ -56,10 +58,12 @@ public class QuestionController {
 	}
 	
 	@GetMapping(value = "/detail/{id}")
-	public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
+	public String detail(Model model, @RequestParam(value="page", defaultValue="0") int page, @PathVariable("id") Integer id, AnswerForm answerForm) {
 		Question question = this.questionService.getQuestion(id);
+		Page<Answer> paging = this.answerService.getAnswer(question, page);
+		System.out.println(paging);
 		model.addAttribute("question", question);
-		
+		model.addAttribute("paging", paging);
 		return "question_detail";
 	}
 	
