@@ -49,8 +49,7 @@
     <h5 class="border-bottom my-3 py-2" 
         th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
     <!-- 답변 반복 시작 -->
-<!--    <div class="card my-3" th:each="answer : ${question.answerList}">-->
-		<div class="card my-3" th:each="answer : ${answerPaging}">
+    <div class="card my-3" th:each="answer : ${question.answerList}">
         <a th:id="|answer_${answer.id}|"></a>
 		<div class="card-body">
             <div class="card-text" th:utext="${@commonUtil.markdown(answer.content)}"></div>
@@ -86,51 +85,29 @@
         </div>
     </div>
     <!-- 답변 반복 끝  -->
-	<!-- 답변 페이징처리 시작 -->
-	<div th:if="${!answerPaging.isEmpty()}">
-		<ul class="pagination justify-content-center">
-			<li class="page-item" th:classappend="${!answerPaging.hasPrevious} ? 'disabled'">
-				<a class="page-link" href="javascript:void(0)" th:data-page="${answerPaging.number - 1}">
-					<span>이전</span>
-				</a>
-			</li>
-			<li th:each="page: ${#numbers.sequence(0, answerPaging.totalPages-1)}"
-				th:if="${page >= answerPaging.number-5 and page <= answerPaging.number+5}"
-				th:classappend="${page == answerPaging.number} ? 'active'" class="page-item">
-				<a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
-			</li>
-			<li class="page-item" th:classappend="${!answerPaging.hasNext} ? 'disabled'">
-				<a class="page-link" href="javascript:void(0)" th:data-page="${answerPaging.number+1}">
-					<span>다음</span>
-				</a>
-			</li>
-		</ul>
-	</div>
-	<!-- 답변 페이징처리 끝 -->
 	
-	<!-- 답변 작성 -->
-	<form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" | method="post" class="my-3">
-		<!--		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">-->
-		<!--			<div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>-->
-		<!--		</div> -->
-		<!--		위에 세줄이 아래 한줄로 대체됨-->
+	
+    <!-- 답변 작성 -->
+    <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}"| 
+	method="post" class="my-3">
+<!--		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">-->
+<!--			<div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>-->
+<!--		</div> -->
+<!--		위에 세줄이 아래 한줄로 대체됨-->
 		<div th:replace="~{form_errors :: formErrorsFragment}"></div>
-	
-	
-		<!--		<textarea th:field="*{content}" rows="10" class="form-control"></textarea>-->
-		<textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
-		<textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
-	
-	
-		<input sec:authorize="isAnonymous()" disabled type="submit" value="답변등록" class="btn btn-primary my-2">
+		
+       
+<!--		<textarea th:field="*{content}" rows="10" class="form-control"></textarea>-->
+		<textarea sec:authorize="isAnonymous()" disabled 
+		th:field="*{content}" class="form-control" rows="10"></textarea>
+      	<textarea sec:authorize="isAuthenticated()" 
+		th:field="*{content}" class="form-control" rows="10"></textarea>
+		
+		
+        <input sec:authorize="isAnonymous()" disabled type="submit" value="답변등록" class="btn btn-primary my-2">
 		<input sec:authorize="isAuthenticated()" type="submit" value="답변등록" class="btn btn-primary my-2">
-	</form>
-	<!-- 답변 페이징 검색 폼 -->
-	<form th:action="@{|/question/detail/${question.id}|}" method="get" id="answerPageForm">
-		<input type="hidden" id="answerPage" name="answerPage" th:value="${answerPaging.number}">
-	</form>
+    </form>
 </div>
-
 
 <script layout:fragment="script" type='text/javascript'>
 	const delete_elements = document.getElementsByClassName("delete");
@@ -151,15 +128,7 @@
 	});
 	// 마크다운에디터
 	var simplemde = new SimpleMDE({element: document.getElementById("content")});
-
-	const page_elements = document.getElementsByClassName("page-link");
-	Array.from(page_elements).forEach(function (element) {
-		element.addEventListener('click', function () {
-			document.getElementById('answerPage').value = this.dataset.page;
-			document.getElementById('answerPageForm').submit();
-		});
-	});
-
+	
 	// 추천기능을 ajax로 구현하는 중인데 게속 실패하는중..
 	// 로그인 되어있을때만 추천버튼이 작동해야하고
 	// 추천을 누른 상태면 버튼의 글씨가 추천 취소로 바뀌어야 하고
