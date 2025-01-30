@@ -5,10 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 
 
 
@@ -54,6 +56,13 @@ public class UserController {
 	@GetMapping("/login")
 	public String login() {
 		return "login_form";
+	}
+	
+	@PostMapping("/userDetail")
+	public String postMethodName(@RequestBody String entity) {
+		//TODO: process POST request
+		
+		return entity;
 	}
 	
 	
