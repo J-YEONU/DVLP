@@ -1,12 +1,14 @@
 package com.mysite.sbb.user;
 
+import java.security.Principal;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
@@ -60,8 +62,8 @@ public class UserController {
 	}
 	
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/userDetail")
-	public String postMethodName(@RequestBody String entity) {
+	@GetMapping("/userDetail")
+	public String userDetail(Principal principal, Model model) {
 		//TODO: process POST request
 		// 유저 이름, 이메일
 		// 이름은 html에서 #authentication.getPrincipal().getUsername() 로 불러오기가 가능하지만
@@ -70,7 +72,18 @@ public class UserController {
 		// 게시글을 page<Question>로 받아서 구현할 예정
 		// 유저가 쓴 댓글 조회
 		// 댓글도 마찬가지로 page<Answer>로 받아서 구현할 예정
-		return entity;
+		// 한 페이지에 두개의 게시판 형태를 표시할지 별도의 버튼을 둘지 고민
+		SiteUser siteuser = userService.getUser(principal.getName());
+		String userName = siteuser.getUsername();
+		String userEmail = siteuser.getEmail();
+		
+		System.out.println(userName);
+		System.out.println(userEmail);
+		
+		model.addAttribute("userName", userName);
+		model.addAttribute("userEmail", userEmail);
+		
+		return "user_detail";
 	}
 	
 	
