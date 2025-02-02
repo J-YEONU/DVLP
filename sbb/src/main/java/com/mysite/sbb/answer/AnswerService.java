@@ -62,4 +62,13 @@ public class AnswerService {
 		Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
 		return this.answerRepository.findAllByQuestion(question, pageable);
 	}
+
+	public Page<Answer> getAnswerByUser(SiteUser siteuser, int apage) {
+		// TODO Auto-generated method stub
+		List<Sort.Order> sorts = new ArrayList<>();
+		sorts.add(Sort.Order.desc("createDate"));
+		Pageable pageable = PageRequest.of(apage, 10,Sort.by(sorts));
+		Page<Answer> answerByUser = this.answerRepository.findByauthor(siteuser,pageable);
+		return answerByUser;
+	}
 }

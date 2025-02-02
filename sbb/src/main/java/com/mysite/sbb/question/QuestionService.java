@@ -105,13 +105,13 @@ public class QuestionService {
 
 
 
-	public Page<Question> getList(SiteUser siteuser, int qpage) {
+	public Page<Question> getQuestionByUser(SiteUser siteuser, int qpage) {
 		// TODO Auto-generated method stub
 		List<Sort.Order> sorts = new ArrayList<>();
 		sorts.add(Sort.Order.desc("createDate"));
 		Pageable pageable = PageRequest.of(qpage, 10,Sort.by(sorts));
-		Page<Question> question = this.questionRepository.findByauthor(siteuser,pageable);
-		return question;
+		Page<Question> questionByUser = this.questionRepository.findByauthor(siteuser,pageable);
+		return questionByUser;
 	}
 	
 	

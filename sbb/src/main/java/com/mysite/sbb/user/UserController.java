@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerService;
 import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionService;
@@ -87,11 +88,13 @@ public class UserController {
 		String userName = siteuser.getUsername();
 		String userEmail = siteuser.getEmail();
 		
-		Page<Question> paging = this.questionService.getList(siteuser, Qpage);
+		Page<Question> qpaging = this.questionService.getQuestionByUser(siteuser, Qpage);
+		Page<Answer> apaging = this.answerService.getAnswerByUser(siteuser, Apage);
 		
 		System.out.println(userName);
 		System.out.println(userEmail);
-		System.out.println(paging.toString());
+		System.out.println(qpaging.toString());
+		System.out.println(apaging.toString());
 		
 		model.addAttribute("userName", userName);
 		model.addAttribute("userEmail", userEmail);
