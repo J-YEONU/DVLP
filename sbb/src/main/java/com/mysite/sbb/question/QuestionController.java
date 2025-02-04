@@ -80,6 +80,7 @@ public class QuestionController {
 			return "question_form";
 		}
 		SiteUser siteUser = this.userService.getUser(principal.getName());
+//		questiomForm.getCategory() 추가 예정
 		this.questionService.create(questiomForm.getSubject(), questiomForm.getContent(), siteUser);
 		return "redirect:/question/list"; //징문 저장 후 징문 목록으로 이동
 	}

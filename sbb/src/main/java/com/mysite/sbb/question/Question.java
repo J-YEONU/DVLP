@@ -46,4 +46,7 @@ public class Question {
 	
 	@ManyToMany
 	Set<SiteUser> voter;
+	
+//	카테고리 추가 예정
+//	String category;
 }

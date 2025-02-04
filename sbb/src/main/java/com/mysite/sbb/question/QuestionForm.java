@@ -14,4 +14,7 @@ public class QuestionForm {
 	
 	@NotEmpty(message="내용은 필수입니다.")
 	private String content;
+	
+//	카테고리
+//	private String category;
 }
