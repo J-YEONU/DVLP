@@ -47,6 +47,7 @@ public class QuestionController {
 //		return "question_list";
 	
 	// 페이징 구현
+	// html에서 카테고리 표시 추가필요
 	public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
 		Page<Question> paging = this.questionService.getList(page, kw);
 		model.addAttribute("paging", paging);
@@ -56,7 +57,7 @@ public class QuestionController {
 //	public List<Question> list() {
 //		return this.questionRepository.findAll();
 	}
-	
+	// html에서 카테고리 표시 추가필요
 	@GetMapping(value = "/detail/{id}")
 	public String detail(Model model, @RequestParam(value="page", defaultValue="0") int page, @PathVariable("id") Integer id, AnswerForm answerForm) {
 		Question question = this.questionService.getQuestion(id);
@@ -84,7 +85,7 @@ public class QuestionController {
 		this.questionService.create(questiomForm.getSubject(), questiomForm.getContent(), siteUser);
 		return "redirect:/question/list"; //징문 저장 후 징문 목록으로 이동
 	}
-	
+	// 카테고리 추가필요
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/modify/{id}")
 	public String questionModify(QuestionForm questionForm, @PathVariable("id") Integer id, Principal principal) {
@@ -96,7 +97,7 @@ public class QuestionController {
 		questionForm.setContent(question.getContent());
 		return "question_form";
 	}
-	
+	// 카테고리 추가필요
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/modify/{id}")
 	public String questionModify(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal,
