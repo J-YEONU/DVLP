@@ -73,7 +73,7 @@ public class QuestionController {
 	public String questionCreate(QuestionForm questiomForm) {
 		return "question_form";
 	}
-	
+	// 카테고리 추가 완
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create")
 	public String questionCreate(@Valid QuestionForm questiomForm, BindingResult bindingResult, Principal principal) {
@@ -81,11 +81,11 @@ public class QuestionController {
 			return "question_form";
 		}
 		SiteUser siteUser = this.userService.getUser(principal.getName());
-//		questiomForm.getCategory() 추가 예정
-		this.questionService.create(questiomForm.getSubject(), questiomForm.getContent(), siteUser);
+		questiomForm.getCategory();
+		this.questionService.create(questiomForm.getSubject(), questiomForm.getContent(), questiomForm.getCategory(), siteUser);
 		return "redirect:/question/list"; //징문 저장 후 징문 목록으로 이동
 	}
-	// 카테고리 추가필요
+	// 카테고리 추가필요 완
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/modify/{id}")
 	public String questionModify(QuestionForm questionForm, @PathVariable("id") Integer id, Principal principal) {
@@ -93,11 +93,12 @@ public class QuestionController {
 		if (!question.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
+		questionForm.setSubject(question.getCategory());
 		questionForm.setSubject(question.getSubject());
 		questionForm.setContent(question.getContent());
 		return "question_form";
 	}
-	// 카테고리 추가필요
+	// 카테고리 추가필요 사비스까지 완
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/modify/{id}")
 	public String questionModify(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal,
@@ -109,7 +110,7 @@ public class QuestionController {
 		if (!question.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
-		this.questionService.modify(question, questionForm.getSubject(), questionForm.getContent());
+		this.questionService.modify(question, questionForm.getSubject(), questionForm.getContent(), question.getCategory());
 		return String.format("redirect:/question/detail/%s", id);
 	}
 	

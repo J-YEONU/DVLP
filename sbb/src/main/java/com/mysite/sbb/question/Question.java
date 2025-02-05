@@ -27,26 +27,26 @@ public class Question {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(length = 200)
 	private String subject;
-	
+
 	@Column(columnDefinition = "TEXT")
 	private String content;
-	
+
 	private LocalDateTime createDate;
-	
+
 	@OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
 	private List<Answer> answerList;
-	
+
 	@ManyToOne
 	private SiteUser author;
-	
+
 	private LocalDateTime modifyDate;
-	
+
 	@ManyToMany
 	Set<SiteUser> voter;
-	
+
 //	카테고리 추가 예정
-//	String category;
+	String category;
 }

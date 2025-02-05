@@ -16,5 +16,5 @@ public class QuestionForm {
 	private String content;
 	
 //	카테고리
-//	private String category;
+	private String category;
 }
